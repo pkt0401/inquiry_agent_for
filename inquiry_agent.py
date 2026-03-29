@@ -606,7 +606,7 @@ class InquiryAgent:
 {{
   "label": "LABEL_NAME",
   "confidence_level": "high" | "low",
-  "rationale": "분류 근거 한 줄",
+  "rationale": "분류 근거 한 줄 (언어: {'한국어' if not self.force_lang or self.force_lang == 'ko' else '영어' if self.force_lang == 'en' else '일본어'})",
   "is_compound": false,
   "sub_labels": []
 }}"""
@@ -831,7 +831,7 @@ class InquiryAgent:
 
         # 개인 맥락 조회 (수강 이력)
         personal_context = self.user_db.build_personal_context_str(
-            inquiry.get('author_id')
+            inquiry.get('author_id'), lang=self.force_lang or 'ko'
         )
 
         # Step 1: LLM 분류
@@ -928,7 +928,7 @@ class InquiryAgent:
         # human_review면 [초안] 태그 추가
         answer_text = eval_result.answer
         if strategy == Strategy.HUMAN_REVIEW:
-            answer_text = f"[초안] {answer_text}"
+            answer_text = f"[Draft] {answer_text}"
 
         # human_review 이후 should_respond 결정
         if strategy == Strategy.NO_RESPONSE:
@@ -1157,7 +1157,7 @@ def _answer_similarity(vs: 'VectorStore', a: str, b: str) -> float:
 def main():
     import argparse
     parser = argparse.ArgumentParser(description="AI Talent Lab 문의 Agent PoC")
-    parser.add_argument("--n-test",       type=int, default=20,  help="테스트케이스 수 (기본 10)")
+    parser.add_argument("--n-test",       type=int, default=10,  help="테스트케이스 수 (기본 10)")
     parser.add_argument("--random-state", type=int, default=12,  help="랜덤 시드 (기본 42)")
     lang_group = parser.add_mutually_exclusive_group()
     lang_group.add_argument("--english",  action="store_true", help="답변을 영어로 강제 출력")
@@ -1213,85 +1213,159 @@ def main():
     print(f"RAG history 로드: {len(agent.inquiry_history)}건\n")
     print("Agent 준비 완료\n", flush=True)
 
-    strategy_labels = {
-        Strategy.NO_RESPONSE:  "운영자 에스컬레이션",
-        Strategy.HUMAN_REVIEW: "RAG 초안 + 운영자 검토",
-        Strategy.TOOL_RAG:     "RAG 자동 답변 게시",
-        Strategy.TOOL_ACTION:  "에이전트 직접 실행",
+    _UI = {
+        'ko': dict(
+            strategy={
+                Strategy.NO_RESPONSE:  "운영자 에스컬레이션",
+                Strategy.HUMAN_REVIEW: "RAG 초안 + 운영자 검토",
+                Strategy.TOOL_RAG:     "RAG 자동 답변 게시",
+                Strategy.TOOL_ACTION:  "에이전트 직접 실행",
+            },
+            test_hdr="테스트 {i}/{total}: {title}",
+            lbl_title="제목", lbl_content="내용", lbl_date="날짜",
+            lbl_db="DB", no_history="(수강 이력 없음)",
+            lbl_conf="신뢰도", lbl_strategy="Strategy",
+            lbl_compound="복합 문의",
+            mode_multi="multi-RAG 합산", mode_human="human_review 라우팅",
+            lbl_reason="판단 근거",
+            lbl_tool_type="Tool 종류", lbl_tool_result="Tool 결과",
+            ok="✅ 성공", fail="❌ 실패",
+            reset_prev="리셋 전 사용 횟수", reset_remain="리셋 후 남은 횟수",
+            lbl_lecture="대상 lecture_id", lbl_reset_cnt="누적 리셋 횟수",
+            lbl_restored="복구 횟수", lbl_total_given="총 부여",
+            lbl_remain_practice="남은 연습 횟수", lbl_literacy="대상 literacy_test_id",
+            lbl_user="사용자", lbl_fail_reason="사유", unknown="알 수 없음",
+            daily_limit="일일 한도", lbl_answer="생성된 답변",
+            lbl_admin_answer="실제 관리자 답변", lbl_similarity="답변 유사도",
+            lbl_raw_note="",
+            lbl_no_date="없음",
+        ),
+        'en': dict(
+            strategy={
+                Strategy.NO_RESPONSE:  "Operator Escalation",
+                Strategy.HUMAN_REVIEW: "RAG Draft + Operator Review",
+                Strategy.TOOL_RAG:     "RAG Auto Post",
+                Strategy.TOOL_ACTION:  "Agent Direct Execution",
+            },
+            test_hdr="Test {i}/{total}: {title}",
+            lbl_title="Title", lbl_content="Content", lbl_date="Date",
+            lbl_db="DB", no_history="(No enrollment history)",
+            lbl_conf="Confidence", lbl_strategy="Strategy",
+            lbl_compound="Compound Inquiry",
+            mode_multi="multi-RAG merge", mode_human="human_review routing",
+            lbl_reason="Reasoning",
+            lbl_tool_type="Tool Type", lbl_tool_result="Tool Result",
+            ok="✅ Success", fail="❌ Failed",
+            reset_prev="Uses before reset", reset_remain="Remaining after reset",
+            lbl_lecture="Target lecture_id", lbl_reset_cnt="Cumulative reset count",
+            lbl_restored="Restored count", lbl_total_given="Total given",
+            lbl_remain_practice="Remaining practice count", lbl_literacy="Target literacy_test_id",
+            lbl_user="User", lbl_fail_reason="Reason", unknown="Unknown",
+            daily_limit="daily limit", lbl_answer="Generated Answer",
+            lbl_admin_answer="Actual Admin Answer", lbl_similarity="Answer Similarity",
+            lbl_raw_note=" (original Korean)",
+            lbl_no_date="N/A",
+        ),
+        'jp': dict(
+            strategy={
+                Strategy.NO_RESPONSE:  "オペレーターエスカレーション",
+                Strategy.HUMAN_REVIEW: "RAG下書き + オペレーターレビュー",
+                Strategy.TOOL_RAG:     "RAG自動回答投稿",
+                Strategy.TOOL_ACTION:  "エージェント直接実行",
+            },
+            test_hdr="テスト {i}/{total}: {title}",
+            lbl_title="タイトル", lbl_content="内容", lbl_date="日付",
+            lbl_db="DB", no_history="(受講履歴なし)",
+            lbl_conf="信頼度", lbl_strategy="ストラテジー",
+            lbl_compound="複合問い合わせ",
+            mode_multi="multi-RAG統合", mode_human="human_reviewルーティング",
+            lbl_reason="判断根拠",
+            lbl_tool_type="ツール種別", lbl_tool_result="ツール結果",
+            ok="✅ 成功", fail="❌ 失敗",
+            reset_prev="リセット前使用回数", reset_remain="リセット後残回数",
+            lbl_lecture="対象 lecture_id", lbl_reset_cnt="累計リセット回数",
+            lbl_restored="復元回数", lbl_total_given="合計付与",
+            lbl_remain_practice="残り練習回数", lbl_literacy="対象 literacy_test_id",
+            lbl_user="ユーザー", lbl_fail_reason="理由", unknown="不明",
+            daily_limit="1日制限", lbl_answer="生成された回答",
+            lbl_admin_answer="実際の管理者回答", lbl_similarity="回答類似度",
+            lbl_raw_note=" (原文・韓国語)",
+            lbl_no_date="なし",
+        ),
     }
+    ui = _UI.get(force_lang or 'ko')
+    strategy_labels = ui['strategy']
 
     for i, test_inquiry in enumerate(test_cases, 1):
         title   = test_inquiry.get('title', '')
         content = agent._strip_html(test_inquiry.get('content', ''))
         content_preview = content[:200].replace('\n', ' ').strip()
 
-        personal_ctx = agent.user_db.build_personal_context_str(test_inquiry.get('author_id'))
+        personal_ctx = agent.user_db.build_personal_context_str(test_inquiry.get('author_id'), lang=force_lang or 'ko')
 
         # 실제 관리자 답변
         actual_answers = comment_map.get(test_inquiry['id'], [])
         actual_text    = agent._strip_html(actual_answers[0].get('content', '')) if actual_answers else ''
 
         print(f"\n{'='*60}")
-        print(f"테스트 {i}/{len(test_cases)}: {title}")
+        print(ui['test_hdr'].format(i=i, total=len(test_cases), title=title))
         print(f"{'='*60}")
-        print(f"[제목]   {title}")
-        print(f"[내용]   {content_preview}{'...' if len(content) > 200 else ''}")
-        print(f"[날짜]   {test_inquiry.get('create_dt', '없음')}")
+        print(f"[{ui['lbl_title']}]   {title}")
+        print(f"[{ui['lbl_content']}]   {content_preview}{'...' if len(content) > 200 else ''}")
+        print(f"[{ui['lbl_date']}]   {test_inquiry.get('create_dt', ui['lbl_no_date'])}")
         if personal_ctx:
             for line in personal_ctx.splitlines():
-                print(f"[DB]     {line}")
+                print(f"[{ui['lbl_db']}]     {line}")
         else:
-            print(f"[DB]     (수강 이력 없음)")
+            print(f"[{ui['lbl_db']}]     {ui['no_history']}")
         print(f"{'-'*60}")
 
         response = agent.process_inquiry(test_inquiry)
 
         print(f"[Label]       {response.label.value}")
-        print(f"[신뢰도]      {response.confidence_level.value}")
-        print(f"[Strategy]    {strategy_labels[response.strategy]}")
+        print(f"[{ui['lbl_conf']}]      {response.confidence_level.value}")
+        print(f"[{ui['lbl_strategy']}]    {strategy_labels[response.strategy]}")
         if response.is_compound:
             sub_labels = response.sub_labels
             all_group2 = all(
                 sl in {l.value for l in GROUP2} for sl in sub_labels
             )
             multi_rag = all_group2 and 2 <= len(set(sub_labels)) <= 3
-            mode = "multi-RAG 합산" if multi_rag else "human_review 라우팅"
-            print(f"[복합 문의]   sub_labels={sub_labels}  ({mode})")
-        print(f"[판단 근거]   {response.reasoning}")
+            mode = ui['mode_multi'] if multi_rag else ui['mode_human']
+            print(f"[{ui['lbl_compound']}]   sub_labels={sub_labels}  ({mode})")
+        print(f"[{ui['lbl_reason']}]   {response.reasoning}")
 
         # Tool 실행 결과 출력 (Group 3 경로)
         if response.tool_result is not None:
             tr = response.tool_result
             tool_type_label = {"auto": "AUTO_TOOL", "approval": "APPROVAL_TOOL"}.get(response.tool_type, response.tool_type)
-            print(f"[Tool 종류]   {tool_type_label}")
+            print(f"[{ui['lbl_tool_type']}]   {tool_type_label}")
             if tr.get("success"):
-                print(f"[Tool 결과]   ✅ 성공")
+                print(f"[{ui['lbl_tool_result']}]   {ui['ok']}")
                 if "prev_used" in tr:
-                    # CODE_REVIEW_RESET
-                    print(f"  → 리셋 전 사용 횟수: {tr.get('prev_used', 0)}회")
-                    print(f"  → 리셋 후 남은 횟수: {CODE_REVIEW_DAILY_LIMIT}회 (일일 한도)")
-                    print(f"  → 대상 lecture_id: {tr.get('lecture_id', 'N/A')}")
-                    print(f"  → 누적 리셋 횟수: {tr.get('reset_count', 'N/A')}")
+                    print(f"  → {ui['reset_prev']}: {tr.get('prev_used', 0)}")
+                    print(f"  → {ui['reset_remain']}: {CODE_REVIEW_DAILY_LIMIT} ({ui['daily_limit']})")
+                    print(f"  → {ui['lbl_lecture']}: {tr.get('lecture_id', 'N/A')}")
+                    print(f"  → {ui['lbl_reset_cnt']}: {tr.get('reset_count', 'N/A')}")
                 elif "restored" in tr:
-                    # LITERACY_PRACTICE_RESET
-                    print(f"  → 복구 횟수: {tr.get('restored', 0)}회")
-                    print(f"  → 총 부여: {tr.get('tutorial_attempts', 'N/A')}회 / 사용: {tr.get('tutorial_used', 'N/A')}회")
-                    print(f"  → 남은 연습 횟수: {tr.get('remaining', 'N/A')}회")
-                    print(f"  → 대상 literacy_test_id: {tr.get('literacy_test_id', 'N/A')}")
+                    print(f"  → {ui['lbl_restored']}: {tr.get('restored', 0)}")
+                    print(f"  → {ui['lbl_total_given']}: {tr.get('tutorial_attempts', 'N/A')} / {tr.get('tutorial_used', 'N/A')}")
+                    print(f"  → {ui['lbl_remain_practice']}: {tr.get('remaining', 'N/A')}")
+                    print(f"  → {ui['lbl_literacy']}: {tr.get('literacy_test_id', 'N/A')}")
                 if tr.get("user_identifier"):
-                    print(f"  → 사용자: {tr['user_identifier']}")
+                    print(f"  → {ui['lbl_user']}: {tr['user_identifier']}")
             else:
-                print(f"[Tool 결과]   ❌ 실패")
-                print(f"  → 사유: {tr.get('reason', '알 수 없음')}")
+                print(f"[{ui['lbl_tool_result']}]   {ui['fail']}")
+                print(f"  → {ui['lbl_fail_reason']}: {tr.get('reason', ui['unknown'])}")
 
         if response.answer:
-            print(f"\n[생성된 답변]\n{response.answer}")
+            print(f"\n[{ui['lbl_answer']}]\n{response.answer}")
 
         if actual_text:
-            print(f"\n[실제 관리자 답변]\n{actual_text[:400]}{'...' if len(actual_text) > 400 else ''}")
+            print(f"\n[{ui['lbl_admin_answer']}{ui['lbl_raw_note']}]\n{actual_text[:400]}{'...' if len(actual_text) > 400 else ''}")
             if response.answer and agent.vector_store:
                 sim = _answer_similarity(agent.vector_store, response.answer, actual_text)
-                print(f"\n[답변 유사도]  {sim*100:.1f}%")
+                print(f"\n[{ui['lbl_similarity']}]  {sim*100:.1f}%")
 
 
 if __name__ == "__main__":

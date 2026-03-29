@@ -86,6 +86,38 @@ STATUS_KO = {
     "in_progress": "진행중",
 }
 
+_STATUS_I18N = {
+    'en': {"completed": "Completed", "failed": "Failed", "in_progress": "In Progress"},
+    'jp': {"completed": "修了", "failed": "未修了", "in_progress": "受講中"},
+}
+
+_CTX_I18N = {
+    'ko': dict(
+        header="## 문의자 수강 이력",
+        current="- 현재 과정",
+        retake="재수강",
+        retake_note="미수료 이력 있음",
+        history="- 전체 이력:",
+        score="점수",
+    ),
+    'en': dict(
+        header="## Inquiry Author Enrollment History",
+        current="- Current Course",
+        retake="Re-enrollment",
+        retake_note="has prior incomplete record",
+        history="- Full History:",
+        score="score",
+    ),
+    'jp': dict(
+        header="## 問い合わせ者の受講履歴",
+        current="- 現在のコース",
+        retake="再受講",
+        retake_note="未修了の履歴あり",
+        history="- 全履歴:",
+        score="スコア",
+    ),
+}
+
 
 def get_connection(db_path: str = DB_PATH) -> sqlite3.Connection:
     conn = sqlite3.connect(db_path)
@@ -702,33 +734,32 @@ class UserContextDB:
             "remaining":          remaining,
         }
 
-    def build_personal_context_str(self, author_id: int) -> str:
+    def build_personal_context_str(self, author_id: int, lang: str = 'ko') -> str:
         """
         프롬프트에 주입할 수강생 개인 맥락 문자열 반환.
         수강 이력 없으면 빈 문자열 반환.
-
-        예시 출력:
-        ## 문의자 수강 이력
-        - 현재 과정: AI Bootcamp 12기 (진행중) — 재수강 (10기 미수료 이력 있음)
-        - 전체 이력:
-          · AI Bootcamp 10기: 미수료 (점수: 45.0) — 최종과제 미제출로 미수료
-          · AI Bootcamp 12기: 진행중
+        lang: 'ko' | 'en' | 'jp'
         """
         ctx = self.get_user_context(author_id)
         if not ctx:
             return ""
 
-        lines = ["## 문의자 수강 이력"]
-        current_line = f"- 현재 과정: {ctx['current_program']} {ctx['current_cohort']} ({STATUS_KO.get('in_progress','진행중')})"
+        i18n = _CTX_I18N.get(lang, _CTX_I18N['ko'])
+        status_map = _STATUS_I18N.get(lang, STATUS_KO)
+
+        lines = [i18n['header']]
+        in_progress_label = status_map.get('in_progress', STATUS_KO['in_progress'])
+        current_line = f"{i18n['current']}: {ctx['current_program']} {ctx['current_cohort']} ({in_progress_label})"
         if ctx["is_retake"]:
-            current_line += f" — 재수강 ({ctx['retake_from']} 미수료 이력 있음)"
+            current_line += f" — {i18n['retake']} ({ctx['retake_from']} {i18n['retake_note']})"
         lines.append(current_line)
 
-        lines.append("- 전체 이력:")
+        lines.append(i18n['history'])
         for e in ctx["enrollments"]:
-            score_str = f" (점수: {e['final_score']})" if e["final_score"] is not None else ""
+            status_label = status_map.get(e['status'], e['status_ko'])
+            score_str = f" ({i18n['score']}: {e['final_score']})" if e["final_score"] is not None else ""
             note_str  = f" — {e['note']}" if e["note"] else ""
-            lines.append(f"  · {e['program']} {e['cohort']}: {e['status_ko']}{score_str}{note_str}")
+            lines.append(f"  · {e['program']} {e['cohort']}: {status_label}{score_str}{note_str}")
 
         return "\n".join(lines)
 
