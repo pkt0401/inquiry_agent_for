@@ -321,7 +321,7 @@ class VectorStore:
 class InquiryAgent:
     ADMIN_IDS = {2, 7, 61, 442, 2425, 3417}
 
-    def __init__(self, knowledge_base_path: str = None):
+    def __init__(self, knowledge_base_path: str = None, force_lang: str = None):
         self.kb       = self._load_knowledge_base(knowledge_base_path)
         self.schedule = self._load_schedule()
         self.user_db  = UserContextDB()
@@ -339,6 +339,7 @@ class InquiryAgent:
             api_version="2024-12-01-preview",
         )
         self.vector_store: Optional[VectorStore] = None
+        self.force_lang: Optional[str] = force_lang  # 'ko' | 'en' | 'jp' | None
 
     # ── Knowledge Base 로드 ────────────────────────────────────────
 
@@ -743,7 +744,7 @@ class InquiryAgent:
     ) -> AnswerEvaluation:
         title   = inquiry.get('title', '')
         content = self._strip_html(inquiry.get('content', ''))
-        lang    = self.detect_language(title + " " + content)
+        lang    = self.force_lang or self.detect_language(title + " " + content)
 
         prior_knowledge = self._prior_knowledge_section()
         schedule        = self._schedule_section()
@@ -1158,7 +1159,12 @@ def main():
     parser = argparse.ArgumentParser(description="AI Talent Lab 문의 Agent PoC")
     parser.add_argument("--n-test",       type=int, default=20,  help="테스트케이스 수 (기본 10)")
     parser.add_argument("--random-state", type=int, default=12,  help="랜덤 시드 (기본 42)")
+    lang_group = parser.add_mutually_exclusive_group()
+    lang_group.add_argument("--english",  action="store_true", help="답변을 영어로 강제 출력")
+    lang_group.add_argument("--japanese", action="store_true", help="답변을 일본어로 강제 출력")
     args = parser.parse_args()
+
+    force_lang = "en" if args.english else "jp" if args.japanese else None
 
     import time as _time
 
@@ -1172,7 +1178,7 @@ def main():
         return
 
     t0 = _time.time()
-    agent = InquiryAgent()
+    agent = InquiryAgent(force_lang=force_lang)
     print(f"[타이머] Agent 초기화: {_time.time()-t0:.1f}s", flush=True)
 
     base_path = os.path.dirname(os.path.abspath(__file__))
