@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Talent Lab 문의 Agent — 파이프라인 흐름도</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
+    background: #0f1117;
+    color: #e0e0e0;
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+  h1 {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #ffffff;
+    margin-bottom: 8px;
+    letter-spacing: 0.02em;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 0.82rem;
+    color: #888;
+    margin-bottom: 48px;
+  }
+
+  /* layout */
+  .pipeline {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* common box */
+  .box {
+    border-radius: 12px;
+    padding: 18px 24px;
+    position: relative;
+    width: 100%;
+  }
+  .box-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.65;
+    margin-bottom: 6px;
+  }
+  .box-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .box-body {
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: #ccc;
+  }
+
+  /* themes */
+  .theme-input  { background: #1c2230; border: 1.5px solid #3b4a6b; }
+  .theme-llm    { background: #1a1f35; border: 1.5px solid #4f6aad; }
+  .theme-code   { background: #1e1a2e; border: 1.5px solid #7c5cbf; }
+  .theme-rag    { background: #0f2118; border: 1.5px solid #2d6a4f; }
+  .theme-answer { background: #1f1a10; border: 1.5px solid #8a6a1f; }
+
+  /* arrow */
+  .arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 40px;
+  }
+  .arrow::before {
+    content: '';
+    width: 2px;
+    flex: 1;
+    background: #444;
+  }
+  .arrow::after {
+    content: '';
+    width: 0;
+    height: 0;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-top: 10px solid #444;
+  }
+
+  /* tags */
+  .output-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .tag {
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: #2a2f4a;
+    border: 1px solid #4f6aad;
+    color: #9fb8f5;
+  }
+  .tag.new { background: #1f2e1a; border-color: #4a8c3f; color: #8fd47e; }
+
+  /* strategy grid */
+  .strategy-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    width: 100%;
+    margin-top: 4px;
+  }
+  .strategy-card {
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 0.8rem;
+    line-height: 1.55;
+  }
+  .s-red    { background: #2a1010; border: 1.5px solid #c0392b; }
+  .s-yellow { background: #241f0a; border: 1.5px solid #c09010; }
+  .s-green  { background: #0a1f10; border: 1.5px solid #27ae60; }
+  .s-teal   { background: #071a1e; border: 1.5px solid #0e8a8a; }
+  .s-compound { background: #1a0f2a; border: 1.5px solid #9b59b6; }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    letter-spacing: 0.05em;
+  }
+  .badge-red    { background: #c0392b; color: #fff; }
+  .badge-yellow { background: #c09010; color: #fff; }
+  .badge-green  { background: #27ae60; color: #fff; }
+  .badge-teal   { background: #0e8a8a; color: #fff; }
+  .badge-purple { background: #9b59b6; color: #fff; }
+
+  .strategy-card .cond {
+    color: #aaa;
+    font-size: 0.75rem;
+    border-top: 1px solid #333;
+    padding-top: 6px;
+    margin-top: 6px;
+  }
+
+  /* confidence table */
+  .conf-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.78rem;
+    margin-top: 12px;
+  }
+  .conf-table th {
+    background: #1e2035;
+    color: #9fb8f5;
+    padding: 7px 12px;
+    text-align: left;
+    font-weight: 600;
+    border: 1px solid #2a3050;
+  }
+  .conf-table td {
+    padding: 7px 12px;
+    border: 1px solid #2a2a2a;
+    vertical-align: top;
+  }
+  .conf-table tr:nth-child(even) td { background: #161820; }
+  .conf-table tr:nth-child(odd)  td { background: #111318; }
+
+  .level-pill {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .lp-vh { background: #27ae60; color: #fff; }
+  .lp-hi { background: #2980b9; color: #fff; }
+  .lp-me { background: #c09010; color: #fff; }
+  .lp-lo { background: #c0392b; color: #fff; }
+
+  /* label groups */
+  .label-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 10px; }
+  .label-group { border-radius: 8px; padding: 10px 14px; font-size: 0.76rem; line-height: 1.7; }
+  .lg-red   { background: #200a0a; border: 1px solid #c0392b; }
+  .lg-green { background: #0a1a0a; border: 1px solid #27ae60; }
+  .lg-teal  { background: #071a1e; border: 1px solid #0e8a8a; }
+  .lg-title { font-weight: 700; margin-bottom: 4px; }
+
+  /* RAG */
+  .rag-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+  .rag-item {
+    background: #0a1a10;
+    border: 1px solid #2d6a4f;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: #b0d8c0;
+  }
+  .rag-item .rag-num { font-weight: 700; color: #4ade80; margin-right: 4px; }
+  .rag-index { margin-top: 10px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .idx-card {
+    background: #071410;
+    border: 1px solid #1e5040;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 0.75rem;
+    color: #90c8a8;
+    text-align: center;
+  }
+  .idx-card .idx-num { font-size: 1.1rem; font-weight: 700; color: #4ade80; display: block; }
+
+  /* output */
+  .output-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
+  .out-card {
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 0.78rem;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  /* legend */
+  .legend {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 48px;
+    flex-wrap: wrap;
+    font-size: 0.75rem;
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 3px; }
+
+  code {
+    background: #1e2030;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 0.76rem;
+    color: #a8d8f0;
+    font-family: 'Consolas', monospace;
+  }
+</style>
+</head>
+<body>
+
+<h1>AI Talent Lab 문의 Agent &mdash; 파이프라인 흐름도</h1>
+<p class="subtitle">inquiry_agent.py 전체 처리 흐름 시각화</p>
+
+<div style="background:#1e2a1e; border:1px solid #3a5a3a; border-radius:8px; padding:12px 18px; margin-bottom:18px; font-size:0.78rem; color:#aaccaa; max-width:760px; margin-left:auto; margin-right:auto;">
+  <strong style="color:#6ab88a;">현재 브랜치: <code style="background:#0d1a0d; padding:2px 6px; border-radius:3px;">indiv_nolabel</code></strong>&nbsp;&nbsp;
+  similarity-only RAG (label 무시, 순수 유사도) + user_db 개인화 + Group 3 Tool 직접 실행
+</div>
+
+<div class="pipeline">
+
+  <!-- INPUT -->
+  <div class="box theme-input" style="max-width:700px;">
+    <div class="box-label">입력</div>
+    <div class="box-title">문의 입력</div>
+    <div class="box-body">
+      <code>title</code> + <code>content</code> (HTML &rarr; 텍스트 변환)<br>
+      언어 자동 감지: 한국어 / 영어 / 일본어
+    </div>
+  </div>
+
+  <div class="arrow"></div>
+
+  <!-- STEP 0: 개인화 DB (user_db.py) -->
+  <div class="box" style="background:#1a2a1a; border:1px solid #3a6a3a; max-width:700px;">
+    <div class="box-label" style="color:#6ab88a;">Step 0 &nbsp;&middot;&nbsp; user_db.py (SQLite)</div>
+    <div class="box-title" style="color:#8ad88a;">개인화 컨텍스트 조회</div>
+    <div class="box-body" style="color:#aaccaa;">
+      <code>user_db.py</code> (SQLite) — 수강생 수강 이력·기수·수료 상태 조회<br>
+      <span style="color:#6ab88a; font-size:0.73rem;">→ LLM 분류·답변 프롬프트에 개인 컨텍스트로 주입</span>
+    </div>
+  </div>
+
+  <div class="arrow"></div>
+
+  <!-- STEP 1: LLM 분류 -->
+  <div class="box theme-llm">
+    <div class="box-label">Step 1 &nbsp;&middot;&nbsp; Azure gpt-5.2 (endpoint 02)</div>
+    <div class="box-title">LLM 분류</div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+      <div>
+        <div style="font-size:0.75rem; color:#7a9adf; font-weight:600; margin-bottom:6px;">프롬프트 주입 &uarr;</div>
+        <div class="box-body">
+          &middot; <strong>prior_knowledge</strong>: 플랫폼&middot;과정&middot;규정 핵심 사실<br>
+          &middot; <strong>label_examples</strong>: 라벨별 설명 + 예시 제목<br>
+          &middot; <strong>혼동 쌍 구분 기준</strong>: ACCOUNT vs PLATFORM 등
+        </div>
+      </div>
+      <div>
+        <div style="font-size:0.75rem; color:#7a9adf; font-weight:600; margin-bottom:6px;">출력 &rarr;</div>
+        <div class="output-tags">
+          <span class="tag">label (12개 중 1)</span>
+          <span class="tag">confidence_level</span>
+          <span class="tag new">is_compound ★</span>
+          <span class="tag new">sub_labels ★</span>
+          <span class="tag" style="color:#ccc; border-color:#444;">rationale</span>
+        </div>
+        <div style="font-size:0.7rem; color:#5a8a5a; margin-top:8px;">★ 복합 문의 감지 (신규)</div>
+      </div>
+    </div>
+
+    <!-- 라벨 그룹 -->
+    <div style="margin-top:16px;">
+      <div style="font-size:0.75rem; color:#7a9adf; font-weight:600; margin-bottom:6px;">카테고리 12개 (label)</div>
+      <div class="label-grid">
+        <div class="label-group lg-red">
+          <div class="lg-title" style="color:#e74c3c;">Group 1 &mdash; no_response 대상</div>
+          ACCOUNT_ACTION_REQUIRED<br>
+          PLATFORM_SYSTEM_ERROR<br>
+          VIDEO_PLAYBACK_ERROR<br>
+          FEATURE_REQUEST<br>
+          UNCATEGORIZED
+        </div>
+        <div class="label-group lg-green">
+          <div class="lg-title" style="color:#2ecc71;">Group 2 &mdash; RAG 답변 대상</div>
+          COURSE_INFO<br>
+          SUBMISSION_POLICY<br>
+          SERVICE_GUIDE<br>
+          ASSIGNMENT_DEVELOPMENT<br>
+          CODE_LOGIC_ERROR
+        </div>
+        <div class="label-group lg-teal">
+          <div class="lg-title" style="color:#1abfbf;">Group 3 &mdash; Tool 직접 실행</div>
+          CODE_REVIEW_RESET<br>
+          LITERACY_PRACTICE_RESET<br>
+          <span style="color:#5a9a9a; font-size:0.72rem; margin-top:4px; display:block;">AUTO_TOOL: 즉시 DB 조작<br>APPROVAL_TOOL: 승인 후 실행 (추후)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 신뢰도 테이블 -->
+    <div style="margin-top:16px;">
+      <div style="font-size:0.75rem; color:#7a9adf; font-weight:600; margin-bottom:6px;">분류 신뢰도 기준 (confidence_level) — ①② 텍스트 기반, RAG 없이 판단</div>
+
+      <!-- 기준 설명 -->
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px;">
+        <div style="background:#111830; border:1px solid #2a3a60; border-radius:7px; padding:8px 10px; font-size:0.75rem; line-height:1.5;">
+          <span style="color:#9fb8f5; font-weight:700;">① 명확성</span><br>
+          <span style="color:#aaa;">무엇을 묻는지 텍스트만 봐도 알 수 있는가</span>
+        </div>
+        <div style="background:#111830; border:1px solid #2a3a60; border-radius:7px; padding:8px 10px; font-size:0.75rem; line-height:1.5;">
+          <span style="color:#9fb8f5; font-weight:700;">② 단일성</span><br>
+          <span style="color:#aaa;">딱 하나로 분류 가능한가 (복합 문의로 sub_label 명확히 식별 가능하면 ② 충족)</span>
+        </div>
+      </div>
+
+      <table class="conf-table">
+        <thead>
+          <tr>
+            <th>레벨</th>
+            <th>충족 조건</th>
+            <th>① 명확성</th>
+            <th>② 단일성</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="level-pill lp-hi">high</span></td>
+            <td>①② 모두 충족 — RAG 시도 (점수·답변 신뢰도로 추가 분기)</td>
+            <td style="text-align:center;">✅</td><td style="text-align:center;">✅</td>
+          </tr>
+          <tr>
+            <td><span class="level-pill lp-lo">low</span></td>
+            <td>① 또는 ② 미충족 — 즉시 no_response</td>
+            <td style="text-align:center;">❌</td><td style="text-align:center;">—</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="font-size:0.72rem; color:#6a8a6a; margin-top:8px;">
+        ③ 답변 가능성은 실제 RAG context까지 확인한 후 Step 4(답변 생성)에서 LLM이 자체 평가
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow"></div>
+
+  <!-- STEP 2: Strategy 결정 -->
+  <div class="box theme-code">
+    <div class="box-label">Step 2 &nbsp;&middot;&nbsp; 코드 로직</div>
+    <div class="box-title">Strategy 결정</div>
+    <div class="box-body" style="margin-bottom:12px;">우선순위 순서로 평가 (위에서 아래로)</div>
+
+    <div class="strategy-grid">
+
+      <!-- TOOL_ACTION -->
+      <div class="strategy-card s-teal">
+        <span class="badge badge-teal">tool_action</span><br>
+        <span style="font-size:1rem; font-weight:700; color:#1abfbf;">에이전트 직접 실행</span><br>
+        <span style="color:#aaa; font-size:0.75rem;">DB 조작 후 즉시 답변</span>
+        <div class="cond">
+          label ∈ <strong>Group 3</strong><br>
+          (최우선 — RAG 없이 즉시 처리)<br>
+          <span style="color:#5a9a9a; font-size:0.73rem;">tools.py 실행기 위임</span>
+        </div>
+      </div>
+
+      <!-- NO_RESPONSE -->
+      <div class="strategy-card s-red">
+        <span class="badge badge-red">no_response</span><br>
+        <span style="font-size:1rem; font-weight:700; color:#e74c3c;">운영자 에스컬레이션</span><br>
+        <span style="color:#aaa; font-size:0.75rem;">답변 생성 없음</span>
+        <div class="cond">
+          label ∈ <strong>Group 1</strong><br>
+          OR <code>confidence == low</code>
+        </div>
+      </div>
+
+      <!-- HUMAN_REVIEW -->
+      <div class="strategy-card s-yellow">
+        <span class="badge badge-yellow">human_review</span><br>
+        <span style="font-size:1rem; font-weight:700; color:#f0c040;">[초안] 생성</span><br>
+        <span style="color:#aaa; font-size:0.75rem;">운영자 검토 후 게시</span>
+        <div class="cond">
+          <code>tool_rag</code> 이었는데<br>
+          RAG score &lt; <strong>0.65</strong> (1차 다운그레이드)<br><br>
+          OR 답변 신뢰도 <code>medium</code><br>
+          (2차 다운그레이드 — Step 4)
+        </div>
+      </div>
+
+      <!-- TOOL_RAG -->
+      <div class="strategy-card s-green">
+        <span class="badge badge-green">tool_rag</span><br>
+        <span style="font-size:1rem; font-weight:700; color:#2ecc71;">자동 답변 게시</span><br>
+        <span style="color:#aaa; font-size:0.75rem;">RAG 검색 후 즉시 게시</span>
+        <div class="cond">
+          label ∈ <strong>Group 2</strong><br>
+          AND <code>confidence == high</code><br>
+          AND RAG score &ge; <strong>0.65</strong><br>
+          AND 답변 신뢰도 <code>high</code>
+        </div>
+      </div>
+
+      <!-- 복합 문의 -->
+      <div class="strategy-card s-compound" style="grid-column: 1 / -1;">
+        <div style="margin-bottom:10px;">
+          <span class="badge badge-purple">★ 복합 문의</span>&nbsp;
+          <span style="font-size:1.05rem; font-weight:700; color:#c39bd3;">→ HUMAN_REVIEW</span>
+          <span style="color:#aaa; font-size:0.75rem; margin-left:8px;">RAG 초안 + 운영자 검토</span>
+        </div>
+        <div style="font-size:0.77rem; color:#aaa; margin-bottom:10px;">
+          조건: <code>is_compound == true</code> AND <code>len(set(sub_labels)) &ge; 2</code> (유효한 라벨 기준)
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <!-- Case A -->
+          <div style="background:#1f0f2e; border:1px solid #8e44ad; border-radius:8px; padding:10px 13px; font-size:0.78rem; line-height:1.55;">
+            <div style="font-weight:700; color:#c39bd3; margin-bottom:5px;">Case A &mdash; Group1 포함</div>
+            <code>sub_labels</code> 中 Group1 라벨 존재<br>
+            <span style="color:#9b8aaa;">→ 운영자 직접 조치가 필요한 항목이 포함되어 있어 반드시 검토 필요</span><br><br>
+            <span style="color:#c39bd3; font-size:0.74rem;">예) sub_labels=['COURSE_INFO', 'ACCOUNT_ACTION_REQUIRED']<br>
+            Q1=수강 조건 (RAG 가능) + Q2=수강 기록 초기화 (운영자 처리)</span>
+          </div>
+          <!-- Case B -->
+          <div style="background:#1a1330; border:1px solid #6c3483; border-radius:8px; padding:10px 13px; font-size:0.78rem; line-height:1.55;">
+            <div style="font-weight:700; color:#a078c8; margin-bottom:5px;">Case B &mdash; Group2만 포함</div>
+            <code>sub_labels</code> 모두 Group2, 개수에 따라 분기<br><br>
+            <div style="background:#120e20; border-radius:6px; padding:7px 10px; margin-bottom:6px;">
+              <span style="color:#4ade80; font-weight:700;">2–3개</span> &rarr; <code style="color:#4ade80;">TOOL_RAG</code> (multi-RAG 합산)<br>
+              <span style="color:#aaa; font-size:0.73rem;">각 sub_label별로 RAG 검색 후 context 합산<br>
+              min(score) &lt; 0.65 이면 HUMAN_REVIEW 다운그레이드<br>
+              예) ['SUBMISSION_POLICY', 'COURSE_INFO'] → 각각 검색 후 합쳐서 답변</span>
+            </div>
+            <div style="background:#120e20; border-radius:6px; padding:7px 10px;">
+              <span style="color:#f0c040; font-weight:700;">4개 이상</span> &rarr; <code style="color:#f0c040;">HUMAN_REVIEW</code><br>
+              <span style="color:#aaa; font-size:0.73rem;">복잡도 초과 → 운영자 검토</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="arrow"></div>
+
+  <!-- STEP 3a: TOOL_ACTION 처리 (Group 3 경로) -->
+  <div class="box" style="background:#071a1e; border:1.5px solid #0e8a8a; max-width:700px;">
+    <div class="box-label" style="color:#1abfbf;">Step 3-A &nbsp;&middot;&nbsp; Group 3 경로만 &nbsp;|&nbsp; tools.py 실행기</div>
+    <div class="box-title" style="color:#1abfbf;">Tool Action 실행 &rarr; 즉시 반환</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px;">
+      <div style="background:#0a2228; border:1px solid #0d7a7a; border-radius:8px; padding:10px 13px; font-size:0.78rem; line-height:1.55; color:#aadddd;">
+        <div style="font-weight:700; color:#1abfbf; margin-bottom:5px;">AUTO_TOOL &mdash; 즉시 실행</div>
+        <code>CODE_REVIEW_RESET</code><br>
+        <span style="color:#5a9a9a;">→ reset_review_count() &nbsp;당일 사용 횟수 0 초기화</span><br><br>
+        <code>LITERACY_PRACTICE_RESET</code><br>
+        <span style="color:#5a9a9a;">→ restore_practice_count() &nbsp;연습 횟수 복구 (기본 1회)</span>
+      </div>
+      <div style="background:#0a2228; border:1px solid #0d5a5a; border-radius:8px; padding:10px 13px; font-size:0.78rem; line-height:1.55; color:#aadddd;">
+        <div style="font-weight:700; color:#8ababa; margin-bottom:5px;">APPROVAL_TOOL &mdash; 추후 추가</div>
+        <span style="color:#5a7a7a;">관리자 승인이 필요한 고위험·비가역적 액션</span><br><br>
+        <div style="margin-top:8px; font-size:0.74rem; color:#1abfbf;">
+          author_id 없으면 → 로그인 정보 요청 메시지 반환
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow"></div>
+
+  <!-- STEP 3b: RAG 검색 -->
+  <div class="box theme-rag">
+    <div class="box-label">Step 3-B &nbsp;&middot;&nbsp; tool_rag / human_review 시에만</div>
+    <div class="box-title">Similarity-only RAG 검색</div>
+
+    <div class="rag-grid">
+      <div class="rag-item">
+        <span class="rag-num">① FAISS 벡터 검색</span><br>
+        Azure <code>text-embedding-3-large</code> (3072차원, endpoint 01)<br>
+        코사인 유사도, 순수 유사도 상위 top_k 반환 (label 무시)<br>
+        <span style="color:#6ab88a; font-size:0.73rem; margin-top:4px; display:block;">
+          <strong style="color:#facc15;">similarity-only 모드</strong>: label 필터링 없이 순수 코사인 유사도 top-5 반환<br>
+          history 문서는 <code>pre_label=False</code>로 라벨 미부여<br>
+          max_score &rarr; Step 2 다운그레이드 판단에 사용
+        </span>
+      </div>
+      <div class="rag-item">
+        <span class="rag-num">② 에러 솔루션 정규식 보완</span><br>
+        <code>CODE_LOGIC_ERROR</code> 또는 에러 키워드 감지 시<br>
+        <code>error_solutions</code> regex 패턴 매칭<br>
+        <span style="color:#6ab88a; font-size:0.73rem; margin-top:4px; display:block;">
+          API Key, 패키지, 코드 에러 해결법 자동 추가
+        </span>
+      </div>
+      <div class="rag-item">
+        <span class="rag-num">③ 과정 정보 보완</span><br>
+        <code>COURSE_INFO</code> 라벨일 때<br>
+        <code>prior_knowledge.programs</code> 키워드 매칭<br>
+        <span style="color:#6ab88a; font-size:0.73rem; margin-top:4px; display:block;">
+          커리큘럼&middot;수강 조건&middot;과제 규정 자동 추가
+        </span>
+      </div>
+      <div class="rag-item">
+        <span class="rag-num">⚡ 임베딩 캐시</span><br>
+        <code>embeddings_cache.pkl</code><br>
+        재실행 시 API 미호출 (MD5 해시 키)<br>
+        <span style="color:#6ab88a; font-size:0.73rem; margin-top:4px; display:block;">
+          배치 100건 단위로 임베딩 API 호출
+        </span>
+      </div>
+    </div>
+
+    <div style="margin-top:14px;">
+      <div style="font-size:0.75rem; color:#4ade80; font-weight:600; margin-bottom:8px;">FAISS 인덱스 구성 (~240건)</div>
+      <div class="rag-index">
+        <div class="idx-card">
+          <span class="idx-num">~20건</span>
+          KB 큐레이션 Q&amp;A<br>
+          <span style="color:#6ab88a;">항상 label 있음<br>inquiry_all.json 중복 제거</span>
+        </div>
+        <div class="idx-card">
+          <span class="idx-num">5건</span>
+          에러 솔루션<br>
+          <span style="color:#6ab88a;">CODE_LOGIC_ERROR</span>
+        </div>
+        <div class="idx-card">
+          <span class="idx-num">~205건</span>
+          History (운영자 답변↔)<br>
+          <span style="color:#6ab88a;">inquiry_all.json 110건 기반<br>pre_label=False (라벨 미부여)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow"></div>
+
+  <!-- STEP 4: 답변 생성 + 자체 평가 -->
+  <div class="box theme-answer">
+    <div class="box-label">Step 4 &nbsp;&middot;&nbsp; Azure gpt-5.2 (endpoint 02) &nbsp;|&nbsp; RAG 경로만</div>
+    <div class="box-title">답변 생성 + LLM 자체 평가</div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px;">
+      <div>
+        <div style="font-size:0.75rem; color:#c0a060; font-weight:600; margin-bottom:6px;">입력 &uarr;</div>
+        <div class="box-body">
+          &middot; 문의 (제목 + 내용)<br>
+          &middot; <strong>[참고 정보]</strong>: FAISS 검색 결과 top-3<br>
+          &middot; prior_knowledge + schedule.json<br>
+          &middot; 개인 컨텍스트 (user_db.py)
+        </div>
+      </div>
+      <div>
+        <div style="font-size:0.75rem; color:#c0a060; font-weight:600; margin-bottom:6px;">출력 JSON &rarr;</div>
+        <div class="box-body">
+          &middot; <code>answer</code>: 답변 텍스트<br>
+          &middot; <code>answer_confidence</code>: <strong>high</strong> / <strong>medium</strong> / <strong>low</strong><br>
+          &middot; <code>uncertain_parts</code>: 확신 없는 부분
+        </div>
+      </div>
+    </div>
+
+    <!-- 자체 평가 기준 -->
+    <div style="background:#1a1400; border:1px solid #4a3800; border-radius:8px; padding:10px 14px; margin-bottom:14px; font-size:0.76rem; line-height:1.6; color:#c8b060;">
+      <strong>답변 신뢰도 자체 평가 기준</strong><br>
+      <span style="color:#4ade80;">high</span>: 참고 정보에 명확한 근거가 있어 답변이 완결됨<br>
+      <span style="color:#f0c040;">medium</span>: 참고 정보로 부분 답변 가능하나 운영자 확인이 필요한 부분 존재<br>
+      <span style="color:#e74c3c;">low</span>: 참고 정보에 근거가 부족해 추측성 답변이 됨
+    </div>
+
+    <!-- 2차 분기 -->
+    <div style="font-size:0.75rem; color:#c0a060; font-weight:600; margin-bottom:8px;">Step 5 — 2차 strategy 분기 (답변 신뢰도 기반, 다운그레이드만 &nbsp;|&nbsp; tool_action 경로 해당 없음)</div>
+    <div class="output-grid">
+      <div class="out-card s-red">
+        <span class="badge badge-red" style="margin-bottom:8px; display:block;">no_response</span>
+        <code style="color:#e74c3c;">answer_confidence == low</code><br>
+        <span style="color:#aaa; font-size:0.73rem;">KB 근거 부족 → 에스컬레이션<br>should_respond = False</span>
+      </div>
+      <div class="out-card s-yellow">
+        <span class="badge badge-yellow" style="margin-bottom:8px; display:block;">human_review</span>
+        <code style="color:#f0c040;">answer_confidence == medium</code><br>
+        <span style="color:#aaa; font-size:0.73rem;">[초안] 태그 부착<br>운영자 검토 후 게시</span>
+      </div>
+      <div class="out-card s-green">
+        <span class="badge badge-green" style="margin-bottom:8px; display:block;">tool_rag</span>
+        <code style="color:#4ade80;">answer_confidence == high</code><br>
+        <span style="color:#aaa; font-size:0.73rem;">기존 strategy 유지<br>자동 게시 완료</span>
+      </div>
+    </div>
+
+    <div style="margin-top:14px; font-size:0.78rem; color:#b0a060; background:#1a1600; border:1px solid #4a3a00; border-radius:8px; padding:10px 14px; line-height:1.6;">
+      <strong>답변 규칙</strong>: 언어 감지 후 한국어&middot;영어&middot;일본어 인사말 분기
+      &rarr; 참고 정보 우선 활용
+      &rarr; 확인되지 않은 내용은 &ldquo;확인 후 안내드리겠습니다&rdquo;
+      &rarr; 마지막 &ldquo;감사합니다.&rdquo; 로 마무리
+      &rarr; <strong>내부 용어(KB&middot;참고 정보&middot;시스템 등) 답변에 절대 노출 금지</strong>
+    </div>
+  </div>
+
+</div><!-- /pipeline -->
+
+<!-- 범례 -->
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#0e8a8a;"></div> tool_action (에이전트 직접 실행)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#c0392b;"></div> no_response (운영자 에스컬레이션)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#c09010;"></div> human_review (초안 + 검토)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#27ae60;"></div> tool_rag (자동 게시)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#9b59b6;"></div> 복합 문의</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#4f6aad;"></div> LLM (Azure gpt-5.2)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#2d6a4f;"></div> RAG / FAISS</div>
+</div>
+
+<p style="text-align:center; margin-top:24px; font-size:0.72rem; color:#555;">
+  inquiry_agent.py &nbsp;&middot;&nbsp; knowledge_base.json &nbsp;&middot;&nbsp; 2026
+</p>
+
+</body>
+</html>

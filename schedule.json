@@ -1,0 +1,59 @@
+{
+  "_comment": "이 파일은 기수별 일정 등 주기적으로 바뀌는 동적 정보를 관리합니다. 기수 변경 시 이 파일만 수정하세요.",
+  "bootcamp": {
+    "current_cohort": "12기 (3차)",
+    "cohort_cycle_weeks": 4,
+    "enrollment_period": {
+      "start": "",
+      "end": "",
+      "note": "모집 기간 외에는 수강 신청 불가"
+    },
+    "course_period": {
+      "start": "2026-02-23",
+      "end": "2026-03-20",
+      "note": "해당 기간에만 강의 수강 및 과제 제출 가능"
+    },
+    "assignment_deadline": "2026-03-20",
+    "result_announcement": "2026-04-03",
+    "notice": "",
+    "upcoming_cohorts": [
+      {
+        "cohort": "13기 (4차)",
+        "enrollment_period": { "start": "2026-01-23", "end": "2026-04-18" },
+        "course_period": { "start": "2026-04-20", "end": "2026-05-15" },
+        "status": "접수중"
+      }
+    ]
+  },
+  "literacy": {
+    "course_period": { "start": "2026-01-01", "end": "2026-12-31", "note": "상시 운영" },
+    "certification_exam": {
+      "current_round": "7차",
+      "exam_date": "2026-03-18",
+      "enrollment_period": { "start": "2026-01-23", "end": "2026-03-16" },
+      "status": "접수중",
+      "note": "온라인 응시. 오프라인 응시는 별도 요청 필요."
+    }
+  },
+  "master_project": {
+    "current_cohort": "8주 과정",
+    "recruitment_period": {
+      "start": "",
+      "end": ""
+    },
+    "course_period": {
+      "start": "",
+      "end": "2026-03-26"
+    },
+    "final_schedule": {
+      "submission_deadline": "2026-03-26",
+      "submission_note": "최종 산출물 제출 마감",
+      "ai_interview_prep": "2026-03-27 오전 (AI 면접 질문 생성 및 검증)",
+      "ai_interview_period": "2026-03-27 14:00 ~ 2026-03-31 (AI 면접 진행)",
+      "mentor_evaluation": "~ 2026-04-02 (시니어 멘토단 평가 및 검증)",
+      "result_announcement": "2026-04-03 (서비스 내 최종 결과 발표)"
+    },
+    "notice": " 최종 일정 진행 중이며 4/3(금) 최종 결과 발표 예정."
+  },
+  "global_notice": ""
+}

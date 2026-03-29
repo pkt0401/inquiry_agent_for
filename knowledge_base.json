@@ -1,0 +1,478 @@
+{
+  "prior_knowledge": {
+    "platform": "AI Talent Lab",
+    "description": "AI Talent Lab은 SK AX그룹의 AI 교육 플랫폼으로, 임직원 대상 AI 역량 개발 과정을 운영합니다.",
+    "programs": [
+      {
+        "id": "ai-literacy",
+        "level": "LV1",
+        "name": "AI Literacy",
+        "description": "AI 기초 개념부터 실습까지 입문자를 위한 과정. 수료 시 인증 자격 부여.",
+        "format": "VOD(온라인), 학습시간 6.5시간, 학점 1점, 교육비용 무료(전사교육비 지원), Learning Guide 공동필수",
+        "enrollment": "상시 오픈. 별도 기수 없이 언제든지 수강 신청 및 수강 가능. (2026년 기준 01-01~12-31 운영)",
+        "certification": "인증 버튼은 인증 시험 응시 대상자에게만, 응시 기간 내에 활성화됨.",
+        "certification_exam": {
+          "name": "AI Literacy 인증 시험",
+          "category": "생성형 AI Fundamental",
+          "format": "온라인 응시 기본. 오프라인 응시는 별도 요청 시 가능.",
+          "duration": "1시간",
+          "capacity": 500,
+          "note": "인증 시험은 별도 신청이 필요하며, 신청 기간 내에만 접수 가능. 응시는 정해진 시험 일정에만 가능하며, 일정 외 응시 불가. 합격 시 AI Literacy 인증 취득.",
+          "practice_rounds": "인증시험 응시자 명단 확정 후 안내메일 발송 시 추가 실습 횟수 부여. 사전연습은 안내메일 수신 후 가능.",
+          "exam_open": "인증시험은 신청 후 시험 당일 오픈. 신청한 일정에 맞춰 안내메일 발송 예정."
+        },
+        "practice_session": {
+          "name": "인증시험 사전연습",
+          "initial_count": 100,
+          "problem_count": 3,
+          "problem_types": "Non-Tech 문제 3문제 (문서 작성, 스프레드시트, 코드 작성 등 혼합 출제)",
+          "count_deduction": "사전연습 시작 시 응시 횟수 1회 차감. 새로고침 시에도 1회 추가 차감됨.",
+          "restore_policy": "플랫폼 안내상 복구 불가이나, 잘못 차감된 경우 운영자(에이전트)가 복구 조치 가능.",
+          "caution": "사전연습 시작 전 확인 팝업 제공. '사전연습 시작' 클릭 시 즉시 1회 차감되며, 시작 후 취소 불가."
+        },
+        "keywords": [
+          "ai literacy",
+          "리터러시",
+          "인증",
+          "lv1",
+          "사전연습",
+          "모의 인증",
+          "연습 횟수"
+        ]
+      },
+      {
+        "id": "ai-bootcamp",
+        "level": "LV2",
+        "name": "AI Bootcamp",
+        "description": "LLM 기반 서비스 개발 전문 과정. 4주 온라인/비대면. 총 6개 모듈 수강 완료 후 최종과제(AI Agent 제작) 제출.",
+        "target_audience": "AI 개발 역량을 보유한 구성원, Python으로 애플리케이션 개발이 가능한 구성원",
+        "format": "4주 온라인/비대면, 학습시간 40시간, 교육비용 무료(전사교육비 지원)",
+        "enrollment": "기수제 운영. 기수별로 모집·수강 기간이 정해져 있으며, 해당 기간에만 수강 및 과제 제출 가능.",
+        "modules": [
+          "LLM Fundamentals",
+          "Prompt Engineering 이론/실습",
+          "Azure OpenAI & LangChain",
+          "RAG(Retrieval-Augmented Generation) 시스템 구축",
+          "Streamlit을 활용한 AI 웹앱 개발",
+          "MCP/A2A의 이해와 실습"
+        ],
+        "completion_condition": "온라인 6개 과정 이수 + 최종 과제(AI Agent 제작) 평가",
+        "final_assignment": {
+          "required_lectures": 6,
+          "topic": "AI Agent 제작",
+          "submittable_multiple_times": true,
+          "components": [
+            "기획 설계 문서 (과제 소개, 기술 구성, 주요 기능 및 동작 시나리오, 기대 효과 등 포함)",
+            "소스코드 (Python 코드 파일)"
+          ],
+          "evaluation": "과제 제출 마감 후 약 2주 뒤 결과 발표. 이메일 및 Slack 채널로 안내. 최종 평가는 코드 리뷰 내 5가지 항목과 동일한 기준으로 진행되며, 과제 설명 내 필수 기술요소를 충실히 활용했는지 평가함. 재제출 시 마지막 제출 코드를 기준으로 최종 평가.",
+          "note": "AI Bootcamp 수료 시 AI Literacy도 수료 처리됨 (A등급 인정)."
+        },
+        "keywords": [
+          "bootcamp",
+          "부트캠프",
+          "llm",
+          "rag",
+          "langchain",
+          "azure",
+          "최종과제",
+          "lv2",
+          "기수",
+          "기수제",
+          "agent",
+          "에이전트",
+          "streamlit",
+          "mcp",
+          "a2a"
+        ]
+      },
+      {
+        "id": "ai-master-project",
+        "level": "LV3",
+        "name": "AI Master Project",
+        "description": "실무 AI 프로젝트 경험 과정.",
+        "keywords": [
+          "master project",
+          "마스터",
+          "실무",
+          "lv3"
+        ]
+      }
+    ],
+    "platform_features": {
+      "dev_environments": "개발환경은 Jupyter(JupyterLab)와 웹 IDE 두 가지 제공. Jupyter는 실습 강의에서 사용하며 노트북 셀 단위 실행. 웹 IDE는 최종과제 개발에 사용하며 파일 트리·에디터·콘솔 구조. 보안 요건 강화로 Jupyter 실습 및 IDE console 기능이 sandbox 형태로 업데이트됨.",
+      "sandbox": "Jupyter와 IDE console은 격리된 sandbox 환경에서 실행됨. 사용자가 .env 파일을 직접 생성·수정할 수 없고, 호스트 시스템 파일에 접근 불가. 환경변수는 플랫폼이 자동 주입하므로 별도 설정 불필요. 세션 간 시스템 설정 변경은 유지되지 않을 수 있음.",
+      "ide": "웹 기반 IDE 제공. 하단 console에서 파이썬 파일 실행 및 결과 확인 가능. Streamlit 실행 버튼으로 바로 앱 실행 가능. SKT망 등 외부망에서도 사이트 접속 및 콘솔 웹소켓이 허용된 환경이면 웹 IDE에서 개발 가능. console은 sandbox 환경으로 시스템 파일 직접 수정 불가.",
+      "code_review": "웹 IDE 내 '코드 리뷰 요청' 버튼으로 AI 코드 리뷰 요청 가능. 하루 3회로 제한됨.",
+      "env_vars": "플랫폼(Jupyter/IDE 모두)에서 Azure OpenAI 환경변수를 자동으로 제공. AOAI_API_KEY, AOAI_ENDPOINT, AOAI_DEPLOY_GPT4O, AOAI_DEPLOY_GPT4O_MINI, AOAI_DEPLOY_EMBED_3_LARGE, AOAI_DEPLOY_EMBED_3_SMALL 등을 os.getenv()로 바로 사용 가능. sandbox 환경이므로 .env 파일 직접 생성·수정이 불가하며, 환경변수는 플랫폼이 자동 주입.",
+      "virtual_env": "플랫폼이 자동으로 가상환경을 설정·관리함. sandbox 환경에서는 사용자가 직접 venv를 생성할 수 없음.",
+      "package_install": "Jupyter 환경에서는 셀 내 !pip install [패키지명]으로 설치. 웹 IDE 환경에서는 console에서 pip install [패키지명]으로 설치. 플랫폼 가상환경 내에서 설치해야 정상 동작.",
+      "assignment_submission": "과제 제출 탭에서 제출. 기획 설계 문서(1·2단계)와 소스코드(3단계) 각각 여러 번 제출 가능.",
+      "jupyter_files": "주피터 파일은 별도 제공하지 않으며, 웹 환경 내 실습 권장."
+    },
+    "important_facts": [
+      "AI Literacy 인증 버튼은 인증 시험 응시자 대상으로만 기간 내 활성화됨. 대상자가 아니라면 비활성화가 정상 상태.",
+      "AI Bootcamp 최종과제는 6개 강의 모두 수강 완료해야 시작 가능.",
+      "최종과제 기획 설계 문서와 소스코드는 여러 번 제출 가능.",
+      "과제 결과 발표는 수강 기간 종료 후 약 2주 뒤 이메일/Slack으로 안내.",
+      "AI Bootcamp 수료 시 AI Literacy도 동시에 수료 처리됨.",
+      "sandbox 환경에서는 사용자가 직접 가상환경(venv)을 생성할 수 없음. 플랫폼이 자동으로 가상환경을 설정·관리.",
+      "실습 파일(주피터 노트북)은 다운로드 제공 안 함. 웹 환경 내에서만 실습.",
+      "플랫폼(Jupyter/IDE) 내에서는 Azure OpenAI 환경변수(AOAI_API_KEY, AOAI_ENDPOINT 등)가 자동 제공되어 별도 설정 없이 os.getenv()로 바로 사용 가능. sandbox 환경이므로 .env 파일 직접 생성·수정 불가.",
+      "보안 요건 강화로 Jupyter 실습 및 IDE console이 sandbox 형태로 업데이트됨. 사용자가 호스트 시스템 파일(.env 등)에 직접 접근할 수 없으며, 환경변수는 플랫폼이 자동 주입.",
+      "웹 IDE 개발환경에서는 SKT망 등 외부망에서도 API 사용 및 개발 가능. 단, 로컬 환경 개발 시 사내망 외에서 제공 API Key 사용 및 비용 지원은 불가.",
+      "웹 IDE 내 코드 리뷰 요청은 하루 10회로 제한됨.",
+      "AI Literacy는 상시 오픈 과정으로 기수 구분 없이 언제든 수강 가능. AI Bootcamp는 기수제로 운영되어 기수별 모집·수강 기간이 정해져 있으며, 해당 기간에만 수강 및 과제 제출 가능.",
+      "AI Bootcamp는 이전 기수 수강 이력과 무관하게 새로운 기수에 재참여 가능. 동일 과정을 여러 기수에 걸쳐 반복 수강할 수 있음. 10기 이후 과정이 개편되어 재수강 시 강의를 처음부터 다시 수강해야 함.",
+      "AI Bootcamp 재수강 신청은 AX College에서 'AI Bootcamp'로 검색 후 원하는 교육일정을 선택하여 신청. 미수료·미제출 시에도 재수강 가능.",
+      "AI Bootcamp 최종과제 평가는 코드 리뷰 내 5가지 항목과 동일한 기준으로 진행. 재제출 시 마지막 제출 코드 기준으로 최종 평가. 필수 기술요소 충실 활용 여부가 핵심 평가 기준.",
+      "AI Bootcamp 강의 중간 과제(모듈별 실습 과제)는 평가 대상이 아님. 개인 실습용이며 최종과제 준비를 위해 수행을 권장하지만 수료 판정에 영향 없음.",
+      "AI Literacy 수료 여부는 인증시험 이력으로 확인. 플랫폼 이수이력 표시는 인증 여부와 무관.",
+      "마스터프로젝트 수료 여부는 이메일로 별도 안내되며, 사내 시스템에 반영. 플랫폼 내 이수이력 표시는 해당 연도 기수 결과 발표 시점에 업데이트.",
+      "인증시험 추가 실습 횟수는 응시자 명단 확정 후 안내메일 발송 시 부여. 사전연습 불가 시 안내메일 수신 여부 확인 필요.",
+      "인증시험은 신청 후 시험 당일 오픈. AX College 공지 참조 권장.",
+      "AI Literacy 인증시험은 온라인 응시가 기본이며, 오프라인 응시는 별도 요청 시 가능. 단, 응시는 정해진 시험 일정에만 가능하며 일정 외에는 응시할 수 없음.",
+      "AI Literacy [VOD] 수강신청은 별도로 불필요. 인증시험에 합격하면 AI Literacy 인증이 자동 부여됨. AX College의 VOD 과정 수강신청을 따로 할 필요 없음.",
+      "AI Literacy 인증 완료 전이어도 AI Bootcamp 수강신청 가능. AX College에서 'AI Bootcamp'로 검색 후 원하는 교육일정 선택하여 신청. 입과자 대상으로 플랫폼 내 AI Bootcamp 버튼이 활성화되며 별도 안내 예정.",
+      "비밀번호는 수강생이 직접 초기화 가능. 운영자 조치 불필요."
+    ]
+  },
+  "label_examples": {
+    "ACCOUNT_ACTION_REQUIRED": {
+      "description": "개인 계정·권한·수강 접근 권한에 대한 직접 조치가 필요한 문의. 운영자가 시스템에서 해당 사용자 설정을 변경해야 해결 가능.",
+      "typical_patterns": [
+        "인증 버튼/과정 버튼이 비활성화되어 있음",
+        "수강 기간 설정 오류로 강의 접근 불가",
+        "응시 자격 확인 요청",
+        "계정·권한 직접 수정 요청"
+      ],
+      "exclusions": [
+        "비밀번호 초기화 — 수강생이 직접 가능하므로 ACCOUNT_ACTION_REQUIRED 아님. SERVICE_GUIDE로 분류."
+      ],
+      "qa_examples": []
+    },
+    "PLATFORM_SYSTEM_ERROR": {
+      "description": "플랫폼 서버·시스템 오류로 인한 기능 이상. 코드 문제가 아닌 플랫폼 자체의 버그나 일시 장애.",
+      "typical_patterns": [
+        "콘솔/IDE 접근이 안됨 (서버 문제)",
+        "파일 업로드·제출 화면 무한 로딩",
+        "강의 탭·과제 탭이 작동 안 함 (시스템 장애)",
+        "Streamlit 실행 경로 변경으로 인한 장애"
+      ],
+      "qa_examples": [
+        {
+          "title": "streamlit 서비스 개발 강의 중 실습 실행이 안됩니다",
+          "question": "환경의 문제인지는 잘 모르겠지만 오후까지 안되다가 지금은 정상적으로 동작합니다.",
+          "answer": "안녕하세요.\n최근 배포 시 streamlit 실행 경로 변경으로 인해 가상환경이 작동하지 않은 것 같습니다.\n수정 배포 완료했습니다. 이후 에러 발생 시 다시 문의해주세요."
+        },
+        {
+          "title": "과제 제출 tab에서 무한 로딩",
+          "question": "과제 제출 tab에서 화면 로딩만 무한으로 계속 돌고 진행이 되지 않습니다.",
+          "answer": "안녕하세요. 확인 후 조치해드리겠습니다. 잠시 후 다시 시도해주시기 바랍니다."
+        },
+        {
+          "title": "AI Bootcamp 과정 중 Prompt Engineering 설문조사 미표시",
+          "question": "AI Bootcamp 과정 중 Prompt Engineering 설문조사가 안 나옵니다.",
+          "answer": "안녕하세요. 확인 후 조치해드리겠습니다."
+        }
+      ]
+    },
+    "VIDEO_PLAYBACK_ERROR": {
+      "description": "강의 영상(VOD)이 재생되지 않거나 로딩만 되는 문제. 영상 스트리밍 서버 또는 네트워크 이슈.",
+      "typical_patterns": [
+        "강의 영상이 로딩만 하고 재생 안 됨",
+        "동영상이 끊기거나 멈춤",
+        "특정 강의 영상만 재생 안 됨"
+      ],
+      "qa_examples": [
+        {
+          "title": "강의 동영상 재생 안됨",
+          "question": "강의 영상이 로딩만 하고 재생이 되지 않습니다.",
+          "answer": "안녕하세요. 일시적인 스트리밍 서버 불안정 문제일 수 있습니다. 새로고침 후 다시 시도해주시고, 지속 발생 시 재문의 부탁드립니다."
+        }
+      ]
+    },
+    "FEATURE_REQUEST": {
+      "description": "플랫폼 기능 개선, UI 변경, 새 기능 추가 등의 건의·요청 사항.",
+      "typical_patterns": [
+        "특정 문구·안내 텍스트 수정 요청",
+        "UI 개선 건의",
+        "실습 파일 다운로드 요청",
+        "새 기능 추가 요청"
+      ],
+      "qa_examples": [
+        {
+          "title": "최종 과제 영역 Comment 변경 요청",
+          "question": "최종 과제 화면 영역에 '3개의 강의를 완료하면 과제를 시작할 수 있습니다'를 '전체 강의'로 변경 요청드립니다.",
+          "answer": "안녕하세요.\n현재 최종 과제 안내 Comment는 최종과제 수행까지 남은 강의 개수가 표시되고 있습니다. 혼동이 있을 수 있어 해당 문구는 다음 배포에서 변경하겠습니다."
+        },
+        {
+          "title": "실습 파일 다운로드할 수 있게 공유 부탁드립니다",
+          "question": "로컬에서 실습하고 있는데 주피터 노트북 파일과 실습 파일을 다운로드할 수 있게 공유해주시면 감사하겠습니다.",
+          "answer": "안녕하세요.\n주피터 파일은 공유를 따로 드리지 않고 있으며 웹 환경 내에서 실습 부탁드립니다."
+        }
+      ]
+    },
+    "UNCATEGORIZED": {
+      "description": "문의 내용이 불명확하거나, 여러 주제가 혼재되어 단일 카테고리로 분류하기 어려운 경우.",
+      "typical_patterns": [
+        "너무 짧거나 내용 없음",
+        "여러 종류의 문제를 동시에 언급",
+        "무슨 도움이 필요한지 명확하지 않음"
+      ],
+      "qa_examples": []
+    },
+    "COURSE_INFO": {
+      "description": "강의 목록, 수강 방법, 과정 커리큘럼, 수료 조건, 과정 간 관계 등 교육 과정 정보 문의.",
+      "typical_patterns": [
+        "특정 과정 수강 신청 방법",
+        "AI Bootcamp 모듈 구성·커리큘럼",
+        "수강 가능 기간 및 조건",
+        "AI Literacy와 AI Bootcamp 수료 관계",
+        "과제 시작 조건 (강의 몇 개 완료해야 하는지)"
+      ],
+      "qa_examples": [
+        {
+          "title": "수강신청",
+          "question": "리터러시 과정을 진행하고자 하는데 AX College에 있는 [VOD] AI Literacy 수강신청을 별도로 해야하나요?",
+          "answer": "안녕하세요, AI Literacy 인증은 시험을 응시하셔서 합격하시면 부여되고 말씀해주신 VOD 과정 수강신청은 필요하지 않습니다. 감사합니다."
+        },
+        {
+          "title": "Bootcamp 최종과제 주제",
+          "question": "AI Bootcamp 강의 수강중입니다. 최종과제 제출 시 사내업무와 무관한 주제로 서비스 기획 및 개발을 진행해도 평가에 영향이 없는지 문의드립니다.",
+          "answer": "안녕하세요.\n최종과제 주제는 사내업무와 무관한 주제도 가능합니다. 인터넷 공개 PDF 문서 활용도 허용됩니다. 창의적인 주제로 진행하셔도 됩니다."
+        },
+        {
+          "title": "AI Literacy 인증 전 AI Bootcamp 수강신청 가능 여부",
+          "question": "AI Literacy 인증이 완료되지 않은 상태에서도 AI Bootcamp 수강신청이 가능한가요?",
+          "answer": "안녕하세요, AI Literacy 인증 완료 전이어도 AI Bootcamp 수강신청은 가능합니다.\nAX College 내에서 'AI Bootcamp'로 검색하신 후 해당 과정의 교육일정을 선택하여 수강신청 해주시면 됩니다.\n입과자 대상으로 AI Bootcamp 버튼이 활성화되며 별도 안내도 드릴 예정입니다.\n감사합니다."
+        }
+      ]
+    },
+    "SUBMISSION_POLICY": {
+      "description": "과제 제출 횟수, 제출 마감 일정, 재제출 가능 여부, 평가 결과 발표 일정 등 과제 제출 관련 정책 문의.",
+      "typical_patterns": [
+        "최종과제 재제출 가능 여부",
+        "과제 제출 마감 날짜",
+        "평가 결과 발표 시기",
+        "과제 제출 후 수정 가능 여부",
+        "미이수·미수료 사유 문의",
+        "기간 내 미제출 시 처리"
+      ],
+      "qa_examples": [
+        {
+          "title": "[Boot Camp] 최종 과제 제출 관련 문의 - 수정 가능 여부",
+          "question": "최종 과제 단계에서 2단계(명세서)를 제출하고 3단계(코딩/개발)로 넘어가도 이후에 돌아와서 다시 수정할 수 있나요?",
+          "answer": "안녕하세요.\n최종과제의 기획 설계 문서와 소스코드는 여러번 제출 가능하십니다."
+        },
+        {
+          "title": "부트캠프 수료 문의",
+          "question": "과제 제출이 완료되면 메일이 간다고 하는데 메일이 오지 않았습니다. 제출 완료된 것이 맞는지 확인해주실 수 있나요?",
+          "answer": "제출완료 후 별도 안내는 없으며 최종과제 내 3건이 모두 완료 시 제출완료입니다."
+        },
+        {
+          "title": "Boot Camp 과제 자동 제출 문의",
+          "question": "과제를 준비 중이었는데 들어와 보니 제출로 되어 있습니다. 과제 제출을 초기화 부탁드립니다. 어느 정도 시간이 지나면 자동으로 제출로 변경되는지요?",
+          "answer": "과제 제출 후 다시 제출 버튼을 누르면 현재 시간으로 제출시간이 업데이트 됩니다. 과제 수정 후 재제출 부탁드립니다. 강의 영상이 있는 강의는 강의 영상이 모두 재생된 후 완료되며, 그 외는 제출 버튼을 통해 완료됩니다."
+        },
+        {
+          "title": "부트캠프 과제 미제출 확인 및 재수강·AI Literacy 인증 문의",
+          "question": "작년에 부트캠프 과정을 진행하고 과제 제출까지 한 것으로 기억나는데 상태가 미제출로 나옵니다. 제출이 안 된 건지 확인 부탁드리고, fail일 경우 재수강 처리는 어떻게 해야 하는지 문의드립니다. 추가로 AI Literacy 인증하기 버튼이 비활성화되어 있어서 이 부분도 확인 부탁드립니다.",
+          "answer": "안녕하세요. 최종과제 미제출로 확인됩니다. 부트캠프는 AX College에서 신청할 수 있습니다. 10기 이후 과정이 개편되어 강의를 처음부터 재수강하셔야 합니다. AI Literacy 인증은 인증 시험을 신청하셔야 하며 AX College에서 신청할 수 있습니다. 신청 일정 확인하여 진행하시면 되며 인증 진행 전 안내메일이 발송됩니다."
+        },
+        {
+          "title": "Boot Camp 강의 중간 과제 평가 영향 여부 문의",
+          "question": "최종 과제를 중심으로 Boot Camp 과정에 대한 PASS를 결정할 것 같은데요. 혹시 강의 과정 중간에 있는 과제들도 영향이 있는지 문의드립니다.",
+          "answer": "강의 내 과제는 평가 대상이 아니며 개인 실습을 위한 과정으로 이해하시면 됩니다. 수강 과정에서 최종 과제의 준비를 위해 해당 과제들을 수행해보시는 것을 권장하고 있습니다."
+        }
+      ]
+    },
+    "SERVICE_GUIDE": {
+      "description": "플랫폼 사용 방법, IDE 사용법, 과제 제출 절차 등 플랫폼 이용 가이드 요청.",
+      "typical_patterns": [
+        "IDE 사용 방법 문의",
+        "콘솔에서 파이썬 실행 방법",
+        "과제 제출 방법·절차",
+        "Streamlit 실행 방법",
+        "플랫폼 기능 사용법"
+      ],
+      "qa_examples": [
+        {
+          "title": "Boot Camp 최종 과제 작성 환경 문의 (SKT망)",
+          "question": "SKT망에서는 LLM(ChatGPT 등) 접속이 허용되지 않는데 과제 개발이 가능한지, 제공 API Key를 SKT망에서도 사용할 수 있는지 문의드립니다.",
+          "answer": "사이트 내 웹 IDE 개발환경에서 개발 시 사내망 제한 없이 API 사용 및 개발이 가능합니다. 사이트 접속이 가능하고 콘솔 접속을 위한 웹소켓 사용이 가능한 환경이라면 부트캠프 교육과정 내용의 개발을 진행할 수 있습니다. 로컬환경에서 개발 후 업로드하는 것은 가능하나 사내망 외에서 사용하는 API Key 제공 및 비용 지원은 되지 않습니다."
+        },
+        {
+          "title": "AI Talent Lab 실습 소스 다운로드 위치",
+          "question": "실습 소스를 로컬 환경에 다운받으면 어느 위치(폴더 경로)에 다운로드 되나요?",
+          "answer": "브라우저 내 설정된 다운로드 폴더 경로로 다운로드 됩니다."
+        },
+        {
+          "title": "과제 문의 - 프롬프트 작성 과제",
+          "question": "AI Bootcamp 과정 중 프롬프트 작성 과제를 어디서 어떻게 해야 하나요? ChatGPT나 Gemini 같은 AI로 과제를 수행한 후 제출하는 건가요?",
+          "answer": "ChatGPT, Gemini 등 AI 서비스에서 직접 수행 후 결과를 제출하시면 됩니다."
+        },
+        {
+          "title": "[실습/인증] AI Literacy 인증시험 사전 연습 추가횟수 문의",
+          "question": "인증시험 신청을 했는데 사전연습을 할 수가 없습니다. 언제 추가횟수 부여되는지 문의드립니다.",
+          "answer": "인증시험 응시자 명단 확정 후 안내메일이 발송되며, 발송 후 추가 실습 횟수 처리가 완료됩니다."
+        },
+        {
+          "title": "비밀번호 초기화 문의",
+          "question": "비밀번호를 잊어버렸는데 어떻게 초기화하나요?",
+          "answer": "안녕하세요. 비밀번호는 로그인 화면에서 직접 초기화하실 수 있습니다. 감사합니다."
+        },
+        {
+          "title": "마이프로필에 이수이력 갱신 여부 문의",
+          "question": "마이 프로필 이수이력 갱신은 언제쯤 되나요? 수료 완료했는데 진행중으로 표시됩니다.",
+          "answer": "AI Literacy의 경우 인증시험 이력을 통해 수료 여부 확인이 가능하며, 이수이력 내 표시는 인증과 무관합니다. 마스터프로젝트 수료 여부는 이메일로 별도 안내되며 사내 시스템에 반영됩니다. 플랫폼 내 이수이력 표시는 해당 연도 기수 결과 발표 시점에 업데이트될 예정입니다."
+        }
+      ]
+    },
+    "ASSIGNMENT_DEVELOPMENT": {
+      "description": "과제 구현 방법, 개발 방향, 아키텍처 설계, 기술 스택 활용법 등 과제 개발 자체에 대한 질문.",
+      "typical_patterns": [
+        "RAG 구현 방법·아키텍처",
+        "LangChain/LangGraph 사용 방법",
+        "멀티 에이전트 설계 방법",
+        "과제 기능 구현 방향",
+        "코드 구조·폴더 설계 방법"
+      ],
+      "qa_examples": [
+        {
+          "title": "bootcamp 관련 평가 기준 문의",
+          "question": "교육과정을 수강하며 관련 기술들을 사용하고 배운 기술들을 응용해서 실제 사용 가능한 서비스를 만드는 데에 초점을 두었습니다. 평가 기준에 대해 문의드립니다.",
+          "answer": "안녕하세요.\n최종 평가는 코드 리뷰 내 5가지 항목과 동일한 기준으로 진행되며, 과제 설명 내 필수 기술요소를 충실히 활용하여 과제를 수행했는지를 중심으로 평가합니다. 동작 가능한 서비스와 충실한 기획 설명서 제출이 중요합니다. 구체적인 평가 기준은 추후 공개될 예정입니다."
+        },
+        {
+          "title": "AI BOOTCAMP 제출 후 평가 기준은 무엇인지요",
+          "question": "제출 전 5가지 항목에서 충족(2), 부분충족(3)이 나왔습니다. 부분충족이 몇번을 수정해서 개발해도 결과가 동일하여, 제출을 눌렀으나 다시 재출하라는 메시지없이 제출이 되었습니다. 평가의 기준이 어떻게 되는지요?",
+          "answer": "안녕하세요.\n제출 후에도 코드를 수정하여 다시 제출하시면 재제출한 코드를 기준으로 다시 평가가 이루어지며, 최종 제출 시 코드 기준으로 최종 평가가 이루어지게 됩니다.\n최종 평가는 코드 리뷰 내 5가지 항목과 동일한 항목을 평가하며 과제 설명 내 필수 기술요소를 충실히 활용하여 과제를 수행했는지 평가합니다.\n구체적인 평가 기준 공개와 관련해서는 현재 논의중에 있으며 관련 내용 결정 후 명확한 기준 공개할 수 있도록 하겠습니다."
+        }
+      ]
+    },
+    "CODE_REVIEW_RESET": {
+      "description": "코드 리뷰 횟수 초기화 요청. 오늘 리뷰 횟수를 다시 채워달라는 명시적 요청.",
+      "typical_patterns": [
+        "코드 리뷰 횟수 초기화",
+        "리뷰 횟수 리셋",
+        "코드 리뷰 다시 요청",
+        "리뷰 횟수 다시"
+      ],
+      "qa_examples": [
+        {
+          "title": "코드 리뷰 횟수 초기화 부탁드립니다",
+          "question": "가능하면 오늘 코드 리뷰 초기화 부탁드릴게요. 실수로 지금까지 코드를 일부 소실하여 다시 리뷰를 받아야 되는데.. 걱정입니다.",
+          "answer": "코드 리뷰 횟수를 초기화했습니다. 오늘 다시 10회 요청하실 수 있습니다."
+        }
+      ]
+    },
+    "LITERACY_PRACTICE_RESET": {
+      "description": "AI Literacy 인증시험 사전연습 횟수 복구 요청. 잘못 클릭으로 차감되었거나 추가 연습 횟수 부여가 필요한 경우.",
+      "typical_patterns": [
+        "AI Literacy 모의 인증 횟수 원복",
+        "사전연습 횟수 복구",
+        "실습 횟수 잘못 차감",
+        "연습 횟수 돌려주세요",
+        "모의고사 횟수 원복"
+      ],
+      "qa_examples": [
+        {
+          "title": "AI Literacy 모의 인증 횟수 원복해주실수 있나요?",
+          "question": "실수로 클릭해서 사전연습 횟수가 차감됐습니다. 원복 부탁드립니다.",
+          "answer": "AI Literacy 사전연습 횟수 1회를 복구했습니다. 다시 연습하실 수 있습니다."
+        },
+        {
+          "title": "인증시험 사전연습 횟수 추가 부여 요청",
+          "question": "인증시험 신청 안내 메일을 받았는데 추가 실습 횟수가 아직 부여되지 않았습니다.",
+          "answer": "AI Literacy 사전연습 횟수를 복구했습니다. 다시 연습하실 수 있습니다."
+        }
+      ]
+    },
+    "CODE_LOGIC_ERROR": {
+      "description": "플랫폼·API 호출 시 발생하는 HTTP 에러 코드(4xx/5xx), Azure OpenAI API Key 오류, 환경변수 문제 등. 코드 자체 디버깅(Python 문법·로직)은 멘토 Agent가 담당하므로 해당 라벨에서 제외.",
+      "typical_patterns": [
+        "HTTP 400 Bad Request — 잘못된 요청 형식",
+        "HTTP 401 Unauthorized — API Key 인증 실패",
+        "HTTP 403 Forbidden — 접근 권한 없음",
+        "HTTP 404 Not Found — 엔드포인트·리소스 없음",
+        "HTTP 429 Too Many Requests — Rate Limit 초과",
+        "HTTP 500/502/503 — 서버 내부 오류 (플랫폼 측)"
+      ],
+      "qa_examples": [
+        {
+          "title": "Azure OpenAI API Key 관련 오류",
+          "question": "OpenAIError: Missing credentials. Please pass one of api_key, azure_ad_token, azure_ad_token_provider, or the AZURE_OPENAI_API_KEY or AZURE_OPENAI_AD_TOKEN environment variables.",
+          "answer": "플랫폼 환경에서는 AOAI_API_KEY, AOAI_ENDPOINT 등 환경변수가 자동으로 제공됩니다. os.getenv('AOAI_API_KEY'), os.getenv('AOAI_ENDPOINT') 형태로 읽어서 사용하세요. sandbox 환경이므로 .env 파일을 직접 만들거나 수정할 수 없으며, 환경변수는 플랫폼이 자동 주입합니다. 강의 실습 코드를 참고하시면 됩니다."
+        },
+        {
+          "title": "코드 리뷰 실패 — Error code 429 RateLimitReached",
+          "question": "리뷰 실패: Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Your requests to gpt-5.4 have exceeded the token rate limit'}}",
+          "answer": "사용량이 많아 일시적으로 발생하는 문제로 일정 시간이 지난 뒤 재시도하시면 됩니다."
+        }
+      ]
+    }
+  },
+  "error_solutions": [
+    {
+      "error_pattern": "missing credentials|aoai.*key|api.?key|openai_api_key|azure_openai.*key",
+      "title": "Azure OpenAI API Key 오류",
+      "solution": "플랫폼 환경(Jupyter/IDE)에서는 AOAI_API_KEY, AOAI_ENDPOINT 등 환경변수가 자동으로 제공됩니다. os.getenv('AOAI_API_KEY') 형태로 읽어서 사용하세요. 로컬 환경에서 개발 중이라면 사내망 외에서는 플랫폼 제공 API Key 사용이 불가하므로 플랫폼 IDE에서 개발하시길 권장합니다."
+    },
+    {
+      "error_pattern": "error.?code.?400|status.?400|bad request|400.*bad",
+      "title": "HTTP 400 Bad Request",
+      "solution": "요청 형식이 올바르지 않습니다. API 호출 파라미터(모델명, 엔드포인트 URL, 요청 바디 형식)를 확인해주세요. Azure OpenAI 사용 시 deployment name이 정확한지 점검하시기 바랍니다."
+    },
+    {
+      "error_pattern": "error.?code.?401|status.?401|unauthorized|authentication.*fail|인증.*실패",
+      "title": "HTTP 401 Unauthorized",
+      "solution": "API Key 인증에 실패했습니다. 플랫폼 환경변수(AOAI_API_KEY)가 올바르게 설정되어 있는지 확인해주세요. os.getenv('AOAI_API_KEY')로 값이 None이 아닌지 먼저 확인하시기 바랍니다."
+    },
+    {
+      "error_pattern": "error.?code.?403|status.?403|forbidden|access.*denied|접근.*거부|권한.*없",
+      "title": "HTTP 403 Forbidden",
+      "solution": "해당 리소스에 접근 권한이 없습니다. 사내망 접속 여부를 확인하고, 플랫폼 제공 API Key를 사용 중인지 점검해주세요. 외부망에서는 플랫폼 API 사용이 제한될 수 있습니다."
+    },
+    {
+      "error_pattern": "error.?code.?404|status.?404|not found|404.*not|엔드포인트.*없|deployment.*not.*found",
+      "title": "HTTP 404 Not Found",
+      "solution": "요청한 엔드포인트 또는 리소스를 찾을 수 없습니다. AOAI_ENDPOINT URL과 deployment name(모델명)이 정확한지 확인해주세요. 오탈자가 있는 경우가 많습니다."
+    },
+    {
+      "error_pattern": "error.?code.?500|status.?500|internal server error|서버.*오류|서버.*에러",
+      "title": "HTTP 500 Internal Server Error",
+      "solution": "플랫폼 서버 내부 오류입니다. 잠시 후 재시도해주세요. 반복적으로 발생하면 운영자에게 문의해주시기 바랍니다."
+    },
+    {
+      "error_pattern": "error.?code.?502|status.?502|bad gateway",
+      "title": "HTTP 502 Bad Gateway",
+      "solution": "플랫폼 게이트웨이 오류입니다. 일시적인 네트워크 문제일 수 있으며 잠시 후 재시도해주세요."
+    },
+    {
+      "error_pattern": "error.?code.?503|status.?503|service unavailable|서비스.*이용.*불가",
+      "title": "HTTP 503 Service Unavailable",
+      "solution": "현재 플랫폼 서비스가 일시적으로 이용 불가한 상태입니다. 잠시 후 재시도해주세요. 반복적으로 발생하면 운영자에게 문의해주시기 바랍니다."
+    },
+    {
+      "error_pattern": "modulenotfounderror|importerror|no module named",
+      "title": "Python 패키지 미설치",
+      "solution": "IDE console에서 직접 'pip install [패키지명]'으로 설치해주세요. 로컬 환경과 플랫폼 가상환경은 분리되어 있으므로 플랫폼 console에서 설치해야 합니다."
+    },
+    {
+      "error_pattern": "keyerror|indexerror|attributeerror|typeerror",
+      "title": "코드 로직 에러",
+      "solution": "에러 메시지의 변수명·키명·타입을 확인하고, 해당 위치 코드를 점검해주세요."
+    },
+    {
+      "error_pattern": "rate.?limit|429|too many requests|RateLimitReached",
+      "title": "API Rate Limit 초과",
+      "solution": "API 호출 빈도를 줄이거나 잠시 후 재시도해주세요. time.sleep()으로 호출 간격을 조절하거나 retry 로직을 추가하시면 됩니다."
+    },
+    {
+      "error_pattern": "리뷰.*실패.*429|리뷰.*429|429.*리뷰|RateLimitReached.*리뷰|리뷰.*RateLimitReached|코드.?리뷰.*rate.?limit|rate.?limit.*코드.?리뷰",
+      "title": "코드 리뷰 Rate Limit 오류",
+      "solution": "사용량이 많아 일시적으로 발생하는 문제로 일정 시간이 지난 뒤 재시도하시면 됩니다."
+    }
+  ]
+}
